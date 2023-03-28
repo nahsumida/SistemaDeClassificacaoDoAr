@@ -31,7 +31,7 @@ else:
 	qldAr = "Bom"
 
 if qldAr == "Bom": 
-	print("Qualidade do ar:", qldAr, "\nImplicacoes a saude: Nenhuma"
+	print("Qualidade do ar:", qldAr, "\nImplicacoes a saude: Nenhuma")
 elif qldAr == "Moderada": 
 	print("Qualidade do ar:", qldAr, "\nImplicacoes a saude: Pessoas de grupos sensíveis (crianças, idosos e pessoas com doenças respiratórias e cardíacas) podem apresentar sintomas como tosse seca e cansaço. A população, em geral, não é afetada.")
 elif qldAr == "Ruim": 
@@ -39,4 +39,4 @@ elif qldAr == "Ruim":
 elif qldAr == "Muito Ruim":
  	print("Qualidade do ar:", qldAr, "\nImplicacoes a saude: Toda a população pode apresentar sintomas como tosse seca, cansaço, ardor nos olhos, nariz e garganta e ainda falta de ar e respiração ofegante. Efeitos mais graves à saúde de grupos sensíveis (crianças, idosos e pessoas com doenças respiratórias e cardíacas).")
 else: 
-	print("Qualidade do ar:", qldAr, "\nImplicacoes a saude: Toda a população pode apresentar sérios riscos de manifestações de doenças respiratórias e cardiovasculares. Aumento de mortes prematuras em pessoas de grupos sensíveis (crianças, idosos e pessoas com doenças respiratórias e cardíacas)."
+	print("Qualidade do ar:", qldAr, "\nImplicacoes a saude: Toda a população pode apresentar sérios riscos de manifestações de doenças respiratórias e cardiovasculares. Aumento de mortes prematuras em pessoas de grupos sensíveis (crianças, idosos e pessoas com doenças respiratórias e cardíacas).")
