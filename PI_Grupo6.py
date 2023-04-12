@@ -1,21 +1,21 @@
 mp10 = -1
 while mp10 < 0: 
-	mp10 = float(input("Digite a quantidade de particulas inalaveis: "))
+	mp10 = float(input("Digite a quantidade de particulas inaláveis: "))
 mp25 = -1
 while mp25 < 0: 
-	mp25 = float(input("Digite a quantidade de particulas inalaveis finas: "))
+	mp25 = float(input("Digite a quantidade de particulas inaláveis finas: "))
 o3 = -1
 while o3 < 0: 
-	o3 = float(input("Digite o nivel de ozonio: "))
+	o3 = float(input("Digite o nível de ozônio: "))
 co = -1
 while co < 0: 
-	co = float(input("Digite o nivel de monoxido de carbono: "))
+	co = float(input("Digite o nível de monóxido de carbono: "))
 no2 = -1
 while no2 < 0: 
-	no2 = float(input("Digite o nivel de dioxido de nitrogenio: "))
+	no2 = float(input("Digite o nível de dióxido de nitrogênio: "))
 so2 = -1
 while so2 < 0: 
-	so2 = float(input("Digite o nivel de dioxido de enxofre: "))
+	so2 = float(input("Digite o nível de dióxido de enxofre: "))
 	
 qldAr = "" 
 if 50 >= mp10 and 25 >= mp25 and 100 >= o3 and 9 >= co and 200 >= no2 and 20 >= so2:
