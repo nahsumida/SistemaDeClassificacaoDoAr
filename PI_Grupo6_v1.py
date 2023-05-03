@@ -34,7 +34,7 @@ else:
 # Saída de dados - Informações sobre a classificação do ar e as implicações a saúde
 if qldAr == "Bom": 
 	print("\nQualidade do ar:", qldAr, "\nImplicacoes a saude: Nenhuma")
-elif qldAr == "Moderada": 
+elif qldAr == "Moderado": 
 	print("\nQualidade do ar:", qldAr, "\nImplicacoes a saude: Pessoas de grupos sensíveis (crianças, idosos e pessoas com doenças respiratórias e cardíacas) podem apresentar sintomas como tosse seca e cansaço. A população, em geral, não é afetada.")
 elif qldAr == "Ruim": 
 	print("\nQualidade do ar:", qldAr, "\nImplicacoes a saude: Toda a população pode apresentar sintomas como tosse seca, cansaço, ardor nos olhos, nariz e garganta. Pessoas de grupos sensíveis (crianças, idosos e pessoas com doenças respiratórias e cardíacas) podem apresentar efeitos mais sérios na saúde.")
