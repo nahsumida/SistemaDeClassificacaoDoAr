@@ -25,14 +25,15 @@ for row in rows:
     mp25=row[1]
     o3=row[2]
     co=row[3]
-    no2=row[4]
-    so2=row[5]
+    no2=row[5]
+    so2=row[6]
 
     print(row)
     print("media mp10", mp10)
     print("\nmedia mp25", mp25)
     print("\nmedia o3", o3)
     print("\nmedia co", co)
+    print("\nmedia no2",no2)
     print("\nmedia so2", so2)
 
 qldAr = "" 
