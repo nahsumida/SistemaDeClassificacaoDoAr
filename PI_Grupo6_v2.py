@@ -3,9 +3,9 @@ import cx_Oracle
 mp10 = mp25 = o3 = co = no2 = so2 = -1
 
 connection = cx_Oracle.connect(
-    user="SYSTEM",
-    password="projeto",#pw,
-    dsn="localhost/xe")
+    user="bd2402231104",
+    password="Ahftk7",#pw,
+    dsn="172.16.12.14/xe")
 
 print("Successfully connected to Oracle Database")
 
@@ -25,8 +25,8 @@ for row in rows:
     mp25=row[1]
     o3=row[2]
     co=row[3]
-    no2=row[5]
-    so2=row[6]
+    no2=row[4]
+    so2=row[5]
 
     print(row)
     print("media mp10", mp10)
