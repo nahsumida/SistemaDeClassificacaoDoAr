@@ -156,3 +156,84 @@ while menu == True:
 
                 menu = False
             break
+'''   #menu de alteracoes
+while True:
+    print('\n\n','\t'*4,'   Alterar\n')
+    print(f'{"[1]":^12} . {"[2]":^12} . {"[3]":^12} . {"[4]":^12} . {"[5]":^12} . {"[6]":^12}')
+    print(f'{"MP 10":^12} | {"MP 2.5":^12} | {"O3":^12} | {"CO":^12} | {"NO2":^12} | {"SO2":^12}')
+    print('{0:^12} | {1:^12} | {2:^12} | {3:^12} | {4:^12} | {5:^12}'.format(mp10,mp25,o3,co,no2,so2))
+    print()
+    alteracao = int(input("\n" "Digite o índice do valor que deseja alterar ou 0 para sair: "))
+    novovalor = -1
+    print()
+    if alteracao == 1:
+        print("\t\t" "Alterar o valor de MP 10")
+        print("\t\t" " > Valor atual: ",mp10)
+        while True:
+                novovalor = float(input("\t\t" " > Digite o novo valor: "))
+                if novovalor < 0:
+                     print("\t\t" ">> Valor inválido!")
+                else:
+                    mp10 = novovalor
+                    print("\t\t" "Valor alterado!")
+                    break
+    if alteracao == 2:
+        print("\t\t" "Alterar o valor de MP 2.5")
+        print("\t\t" " > Valor atual: ",mp25)
+        while True:
+            novovalor = float(input("\t\t" " > Digite o novo valor: "))
+            if novovalor < 0:
+                 print("\t\t" ">> Valor inválido!")
+            else:
+                mp25 = novovalor
+                print("\t\t" "Valor alterado!")
+                break
+    if alteracao == 3:
+        print("\t\t" "Alterar o valor de O3")
+        print("\t\t" " > Valor atual: ",o3)
+        while True:
+            novovalor = float(input("\t\t" " > Digite o novo valor: "))
+            if novovalor < 0:
+                 print("\t\t" ">> Valor inválido!")
+            else:
+                o3 = novovalor
+                print("\t\t" "Valor alterado!")
+                break
+    if alteracao == 4:
+        print("\t\t" "Alterar o valor de CO")
+        print("\t\t" " > Valor atual: ",co)
+        while True:
+            novovalor = float(input("\t\t" " > Digite o novo valor: "))
+            if novovalor < 0:
+                 print("\t\t" ">> Valor inválido!")
+            else:
+                co = novovalor
+                print("\t\t" "Valor alterado!")
+                break
+    if alteracao == 5:
+        print("\t\t" "Alterar o valor de NO2")
+        print("\t\t" " > Valor atual: ",no2)
+        while True:
+            novovalor = float(input("\t\t" " > Digite o novo valor: "))
+            if novovalor < 0:
+                 print("\t\t" ">> Valor inválido!")
+            else:
+                no2 = novovalor
+                print("\t\t" "Valor alterado!")
+                break
+    if alteracao == 6:
+        print("\t\t" "Alterar o valor de SO2")
+        print("\t\t" " > Valor atual: ",so2)
+        while True:
+            novovalor = float(input("\t\t" " > Digite o novo valor: "))
+            if novovalor < 0:
+                 print("\t\t" ">> Valor inválido!")
+            else:
+                so2 = novovalor
+                print("\t\t" "Valor alterado!")
+                break
+    if alteracao == 0:
+         print("Saindo do menu de alterações...")
+         break 
+    if alteracao < 0 or alteracao > 6:
+        print(f'{"Digite um índice válido!":^80}')'''
