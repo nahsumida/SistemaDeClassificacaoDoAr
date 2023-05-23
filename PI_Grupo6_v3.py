@@ -32,7 +32,158 @@ def addAmostra(connection):
     print(sqlInsert)
     cur.execute(sqlInsert)
 
-    sqlSelect= 'select mp10, mp25, o3, co, no2, so2 from amostras'
+    exibirTab(connection)
+    '''sqlSelect= 'select mp10, mp25, o3, co, no2, so2 from amostras'
+    cur.execute(sqlSelect)
+        
+    column_names = [desc[0] for desc in cur.description]
+    print(column_names)
+
+    rows = cur.fetchall()
+
+    for row in rows: 
+        print(row)'''
+
+    return ('\t'*3, "\nAdicionado com sucesso, Voltando Ao Menu")
+
+def altAmostra(connection, id, str, val):
+    id = int(id)
+    str = str(str)
+    val = float(val)
+
+    cur = connection.cursor()
+
+    sqlUpdate = "alter table AMOSTRAS where id={} set {}={}".format(id, str, val)
+    cur.execute(sqlUpdate)
+  
+    sqlSelect = "Select mp10, mp25, o3, co, no2, so2 from AMOSTRAS where id={}".format(id)
+    rows = cur.fetchall()
+
+    for row in rows: 
+        print(row)
+    
+    return "alterado com sucesso"
+
+def menuAlt(connection):
+    exibirTab(connection)
+    cur = connection.cursor()
+    mp10 = mp25 = o3 = co = no2 = so2 = -1
+
+    id = int(input("Digite a o id da amostra que deseja alterar: "))
+    #criar verificação para ver se existe no banco
+    sqlSelect= "Select mp10, mp25, o3, co, no2, so2 from AMOSTRAS where id={}".format(id)
+    cur.execute(sqlSelect)
+    
+    rows = cur.fetchall()
+
+    for row in rows:
+        mp10=row[0]
+        mp25=row[1]
+        o3=row[2]
+        co=row[3]
+        no2=row[4]
+        so2=row[5]
+        print(row)    
+    
+    while True:
+        print('\n\n','\t'*4,'   Alterar\n')
+        print(f'{"[1]":^12} . {"[2]":^12} . {"[3]":^12} . {"[4]":^12} . {"[5]":^12} . {"[6]":^12}')
+        print(f'{"MP 10":^12} | {"MP 2.5":^12} | {"O3":^12} | {"CO":^12} | {"NO2":^12} | {"SO2":^12}')
+        print('{0:^12} | {1:^12} | {2:^12} | {3:^12} | {4:^12} | {5:^12}'.format(mp10,mp25,o3,co,no2,so2))
+        print()
+        alteracao = int(input("\n" "Digite o índice do valor que deseja alterar ou 0 para sair: "))
+        novovalor = -1
+        print()
+        if alteracao == 1:
+            str = "mp10"
+            print("\t\t" "Alterar o valor de MP 10")
+            print("\t\t" " > Valor atual: ",mp10)
+            while True:
+                    novovalor = float(input("\t\t" " > Digite o novo valor: "))
+                    if novovalor < 0:
+                        print("\t\t" ">> Valor inválido!")
+                    else:
+                        mp10 = novovalor
+                        altAmostra(connection, id, str, mp10)
+                        print("\t\t" "Valor alterado!")
+                        break
+        if alteracao == 2:
+            str = "mp25"
+            print("\t\t" "Alterar o valor de MP 2.5")
+            print("\t\t" " > Valor atual: ",mp25)
+            while True:
+                novovalor = float(input("\t\t" " > Digite o novo valor: "))
+                if novovalor < 0:
+                    print("\t\t" ">> Valor inválido!")
+                else:
+                    mp25 = novovalor
+                    altAmostra(connection, id, str, mp25)
+                    print("\t\t" "Valor alterado!")
+                    break
+        if alteracao == 3:
+            str = "o3"
+            print("\t\t" "Alterar o valor de O3")
+            print("\t\t" " > Valor atual: ",o3)
+            while True:
+                novovalor = float(input("\t\t" " > Digite o novo valor: "))
+                if novovalor < 0:
+                    print("\t\t" ">> Valor inválido!")
+                else:
+                    o3 = novovalor
+                    altAmostra(connection, id, str, o3)
+                    print("\t\t" "Valor alterado!")
+                    break
+        if alteracao == 4:
+            str = "co"
+            print("\t\t" "Alterar o valor de CO")
+            print("\t\t" " > Valor atual: ",co)
+            while True:
+                novovalor = float(input("\t\t" " > Digite o novo valor: "))
+                if novovalor < 0:
+                    print("\t\t" ">> Valor inválido!")
+                else:
+                    co = novovalor
+                    altAmostra(connection, id, str, co)
+                    print("\t\t" "Valor alterado!")
+                    break
+        if alteracao == 5:
+            str = "no2"
+            print("\t\t" "Alterar o valor de NO2")
+            print("\t\t" " > Valor atual: ",no2)
+            while True:
+                novovalor = float(input("\t\t" " > Digite o novo valor: "))
+                if novovalor < 0:
+                    print("\t\t" ">> Valor inválido!")
+                else:
+                    no2 = novovalor
+                    altAmostra(connection, id, str, no2)
+                    print("\t\t" "Valor alterado!")
+                    break
+        if alteracao == 6:
+            str = "so2"
+            print("\t\t" "Alterar o valor de SO2")
+            print("\t\t" " > Valor atual: ",so2)
+            while True:
+                novovalor = float(input("\t\t" " > Digite o novo valor: "))
+                if novovalor < 0:
+                    print("\t\t" ">> Valor inválido!")
+                else:
+                    so2 = novovalor
+                    altAmostra(connection, id, str, so2)
+                    print("\t\t" "Valor alterado!")
+                    break
+        if alteracao == 0:
+            print("Saindo do menu de alterações...")
+            break 
+        if alteracao < 0 or alteracao > 6:
+            print(f'{"Digite um índice válido!":^80}')
+
+    return  ('\t'*3, "\nAlterado com sucesso, Voltando Ao Menu")
+    
+def exibirTab(connection):
+    cur = connection.cursor()
+
+    sqlSelect= 'select id, mp10, mp25, o3, co, no2, so2 from amostras'
     cur.execute(sqlSelect)
         
     column_names = [desc[0] for desc in cur.description]
@@ -43,16 +194,17 @@ def addAmostra(connection):
     for row in rows: 
         print(row)
 
-    return ('\t'*3, "\nAdicionado com sucesso, Voltando Ao Menu")
-
-def altAmostra(connection):
-    cur = connection.cursor()
-
-    return "alterado com sucesso"
+    return "" 
 
 def delAmostra(connection):
+    exibirTab(connection)
     cur = connection.cursor()
 
+    id = int(input("Digite a o id da amostra que deseja alterar: "))
+    #criar verificação para ver se existe no banco
+    sqlSelect= "delete from AMOSTRAS where id={}".format(id)
+    cur.execute(sqlSelect)
+    
     return ('\t'*3,"\nDeletado com sucesso, Voltando Ao Menu")
 
 def classAmostra(connection):
@@ -134,7 +286,7 @@ while menu == True:
                 print(result)
             elif opcao == 2:
                 print('\n\n','\t'*4,'   Alterar\n')
-                result = altAmostra(con)
+                result = menuAlt(con)
                 con.commit()
 
                 print(result)
@@ -156,84 +308,3 @@ while menu == True:
 
                 menu = False
             break
-'''   #menu de alteracoes
-while True:
-    print('\n\n','\t'*4,'   Alterar\n')
-    print(f'{"[1]":^12} . {"[2]":^12} . {"[3]":^12} . {"[4]":^12} . {"[5]":^12} . {"[6]":^12}')
-    print(f'{"MP 10":^12} | {"MP 2.5":^12} | {"O3":^12} | {"CO":^12} | {"NO2":^12} | {"SO2":^12}')
-    print('{0:^12} | {1:^12} | {2:^12} | {3:^12} | {4:^12} | {5:^12}'.format(mp10,mp25,o3,co,no2,so2))
-    print()
-    alteracao = int(input("\n" "Digite o índice do valor que deseja alterar ou 0 para sair: "))
-    novovalor = -1
-    print()
-    if alteracao == 1:
-        print("\t\t" "Alterar o valor de MP 10")
-        print("\t\t" " > Valor atual: ",mp10)
-        while True:
-                novovalor = float(input("\t\t" " > Digite o novo valor: "))
-                if novovalor < 0:
-                     print("\t\t" ">> Valor inválido!")
-                else:
-                    mp10 = novovalor
-                    print("\t\t" "Valor alterado!")
-                    break
-    if alteracao == 2:
-        print("\t\t" "Alterar o valor de MP 2.5")
-        print("\t\t" " > Valor atual: ",mp25)
-        while True:
-            novovalor = float(input("\t\t" " > Digite o novo valor: "))
-            if novovalor < 0:
-                 print("\t\t" ">> Valor inválido!")
-            else:
-                mp25 = novovalor
-                print("\t\t" "Valor alterado!")
-                break
-    if alteracao == 3:
-        print("\t\t" "Alterar o valor de O3")
-        print("\t\t" " > Valor atual: ",o3)
-        while True:
-            novovalor = float(input("\t\t" " > Digite o novo valor: "))
-            if novovalor < 0:
-                 print("\t\t" ">> Valor inválido!")
-            else:
-                o3 = novovalor
-                print("\t\t" "Valor alterado!")
-                break
-    if alteracao == 4:
-        print("\t\t" "Alterar o valor de CO")
-        print("\t\t" " > Valor atual: ",co)
-        while True:
-            novovalor = float(input("\t\t" " > Digite o novo valor: "))
-            if novovalor < 0:
-                 print("\t\t" ">> Valor inválido!")
-            else:
-                co = novovalor
-                print("\t\t" "Valor alterado!")
-                break
-    if alteracao == 5:
-        print("\t\t" "Alterar o valor de NO2")
-        print("\t\t" " > Valor atual: ",no2)
-        while True:
-            novovalor = float(input("\t\t" " > Digite o novo valor: "))
-            if novovalor < 0:
-                 print("\t\t" ">> Valor inválido!")
-            else:
-                no2 = novovalor
-                print("\t\t" "Valor alterado!")
-                break
-    if alteracao == 6:
-        print("\t\t" "Alterar o valor de SO2")
-        print("\t\t" " > Valor atual: ",so2)
-        while True:
-            novovalor = float(input("\t\t" " > Digite o novo valor: "))
-            if novovalor < 0:
-                 print("\t\t" ">> Valor inválido!")
-            else:
-                so2 = novovalor
-                print("\t\t" "Valor alterado!")
-                break
-    if alteracao == 0:
-         print("Saindo do menu de alterações...")
-         break 
-    if alteracao < 0 or alteracao > 6:
-        print(f'{"Digite um índice válido!":^80}')'''
