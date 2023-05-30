@@ -29,40 +29,25 @@ def addAmostra(connection):
         so2 = float(input("Digite o nível de dióxido de enxofre: "))
             
     sqlInsert= "INSERT INTO AMOSTRAS VALUES(ID_SEQ.NEXTVAL, {}, {}, {}, {}, {}, {})".format(mp10, mp25, o3, co, no2, so2)
-    print(sqlInsert)
     cur.execute(sqlInsert)
+    con.commit()
 
     exibirTab(connection)
-    '''sqlSelect= 'select mp10, mp25, o3, co, no2, so2 from amostras'
-    cur.execute(sqlSelect)
-        
-    column_names = [desc[0] for desc in cur.description]
-    print(column_names)
-
-    rows = cur.fetchall()
-
-    for row in rows: 
-        print(row)'''
-
-    return ('\t'*3, "\nAdicionado com sucesso, Voltando Ao Menu")
+    
+    return ('\t\t\t\nAdicionado com sucesso, Voltando Ao Menu')
 
 def altAmostra(connection, id, str, val):
     id = int(id)
-    str = str(str)
+    str = str
     val = float(val)
 
     cur = connection.cursor()
 
-    sqlUpdate = "alter table AMOSTRAS where id={} set {}={}".format(id, str, val)
+    sqlUpdate = "update AMOSTRAS set {}={} where id={}".format( str, val,id)
     cur.execute(sqlUpdate)
-  
-    sqlSelect = "Select mp10, mp25, o3, co, no2, so2 from AMOSTRAS where id={}".format(id)
-    rows = cur.fetchall()
-
-    for row in rows: 
-        print(row)
+    con.commit()
     
-    return "alterado com sucesso"
+    return 
 
 def menuAlt(connection):
     exibirTab(connection)
@@ -200,7 +185,7 @@ def delAmostra(connection):
     exibirTab(connection)
     cur = connection.cursor()
 
-    id = int(input("Digite a o id da amostra que deseja alterar: "))
+    id = int(input("Digite a o id da amostra que deseja excluir: "))
     #criar verificação para ver se existe no banco
     sqlSelect= "delete from AMOSTRAS where id={}".format(id)
     cur.execute(sqlSelect)
@@ -281,7 +266,6 @@ while menu == True:
             if opcao == 1:
                 print('\n\n','\t'*4,'   Adicionar\n')
                 result = addAmostra(con)
-                con.commit()
 
                 print(result)
             elif opcao == 2:
