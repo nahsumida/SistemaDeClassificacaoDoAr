@@ -1,14 +1,25 @@
 import cx_Oracle
 
-def conexao(pw):
-    pw = str(pw)
+def conexao():
+    pw = ""
+    while pw != "projeto":
+        pw = input("Digite a senha do banco de dados para acessar o sistema: ")
+
     connection = cx_Oracle.connect(
         user="SYSTEM",
-        password="projeto",#pw,
+        password=pw,
         dsn="localhost/xe")
 
     print('\t'*3, "\nSuccessfully connected to Oracle Database")
     return (connection)
+
+def leitura(prompt, msgerro='Erro: Digite numero ', tipo = 'int'):
+    while True:
+        try: 
+            var = int(input(prompt)) if tipo =='int' else float(input(prompt))
+            return var
+        except ValueError:
+            print(msgerro + tipo)
 
 def addAmostra(connection):
     cur = connection.cursor()
@@ -16,21 +27,22 @@ def addAmostra(connection):
     mp10 = mp25 = o3 = co = no2 = so2 = -1
 
     while mp10 < 0: 
-        mp10 = float(input("Digite a quantidade de particulas inaláveis: "))
+        mp10 = leitura("Digite a quantidade de particulas inaláveis: ",tipo='float')
     while mp25 < 0: 
-        mp25 = float(input("Digite a quantidade de particulas inaláveis finas: "))
+        mp25 = leitura("Digite a quantidade de particulas inaláveis finas: ", tipo='float')
     while o3 < 0: 
-        o3 = float(input("Digite o nível de ozônio: "))
+        o3 = leitura("Digite o nível de ozônio: ", tipo='float')
     while co < 0: 
-        co = float(input("Digite o nível de monóxido de carbono: "))
+        co = leitura("Digite o nível de monóxido de carbono: ", tipo='float')
     while no2 < 0: 
-        no2 = float(input("Digite o nível de dióxido de nitrogênio: "))
+        no2 = leitura("Digite o nível de dióxido de nitrogênio: ", tipo='float')
     while so2 < 0: 
-        so2 = float(input("Digite o nível de dióxido de enxofre: "))
+        so2 = leitura("Digite o nível de dióxido de enxofre: ", tipo='float')
             
     sqlInsert= "INSERT INTO AMOSTRAS VALUES(ID_SEQ.NEXTVAL, {}, {}, {}, {}, {}, {})".format(mp10, mp25, o3, co, no2, so2)
     cur.execute(sqlInsert)
     con.commit()
+
 
     exibirTab(connection)
     
@@ -54,7 +66,7 @@ def menuAlt(connection):
     cur = connection.cursor()
     mp10 = mp25 = o3 = co = no2 = so2 = -1
 
-    id = int(input("Digite a o id da amostra que deseja alterar: "))
+    id = leitura("Digite a o id da amostra que deseja alterar: ")
     #criar verificação para ver se existe no banco
     sqlSelect= "Select mp10, mp25, o3, co, no2, so2 from AMOSTRAS where id={}".format(id)
     cur.execute(sqlSelect)
@@ -76,7 +88,7 @@ def menuAlt(connection):
         print(f'{"MP 10":^12} | {"MP 2.5":^12} | {"O3":^12} | {"CO":^12} | {"NO2":^12} | {"SO2":^12}')
         print('{0:^12} | {1:^12} | {2:^12} | {3:^12} | {4:^12} | {5:^12}'.format(mp10,mp25,o3,co,no2,so2))
         print()
-        alteracao = int(input("\n" "Digite o índice do valor que deseja alterar ou 0 para sair: "))
+        alteracao = leitura("\n" "Digite o índice do valor que deseja alterar ou 0 para sair: ")
         novovalor = -1
         print()
         if alteracao == 1:
@@ -84,7 +96,7 @@ def menuAlt(connection):
             print("\t\t" "Alterar o valor de MP 10")
             print("\t\t" " > Valor atual: ",mp10)
             while True:
-                    novovalor = float(input("\t\t" " > Digite o novo valor: "))
+                    novovalor = leitura("\t\t" " > Digite o novo valor: ", tipo='float')
                     if novovalor < 0:
                         print("\t\t" ">> Valor inválido!")
                     else:
@@ -97,7 +109,7 @@ def menuAlt(connection):
             print("\t\t" "Alterar o valor de MP 2.5")
             print("\t\t" " > Valor atual: ",mp25)
             while True:
-                novovalor = float(input("\t\t" " > Digite o novo valor: "))
+                novovalor = leitura("\t\t" " > Digite o novo valor: ",  tipo='float')
                 if novovalor < 0:
                     print("\t\t" ">> Valor inválido!")
                 else:
@@ -110,7 +122,7 @@ def menuAlt(connection):
             print("\t\t" "Alterar o valor de O3")
             print("\t\t" " > Valor atual: ",o3)
             while True:
-                novovalor = float(input("\t\t" " > Digite o novo valor: "))
+                novovalor = leitura("\t\t" " > Digite o novo valor: ",  tipo='float')
                 if novovalor < 0:
                     print("\t\t" ">> Valor inválido!")
                 else:
@@ -123,7 +135,7 @@ def menuAlt(connection):
             print("\t\t" "Alterar o valor de CO")
             print("\t\t" " > Valor atual: ",co)
             while True:
-                novovalor = float(input("\t\t" " > Digite o novo valor: "))
+                novovalor = leitura("\t\t" " > Digite o novo valor: ",  tipo='float')
                 if novovalor < 0:
                     print("\t\t" ">> Valor inválido!")
                 else:
@@ -136,7 +148,7 @@ def menuAlt(connection):
             print("\t\t" "Alterar o valor de NO2")
             print("\t\t" " > Valor atual: ",no2)
             while True:
-                novovalor = float(input("\t\t" " > Digite o novo valor: "))
+                novovalor = leitura("\t\t" " > Digite o novo valor: ", tipo='float')
                 if novovalor < 0:
                     print("\t\t" ">> Valor inválido!")
                 else:
@@ -149,7 +161,7 @@ def menuAlt(connection):
             print("\t\t" "Alterar o valor de SO2")
             print("\t\t" " > Valor atual: ",so2)
             while True:
-                novovalor = float(input("\t\t" " > Digite o novo valor: "))
+                novovalor = leitura("\t\t" " > Digite o novo valor: ", tipo='float')
                 if novovalor < 0:
                     print("\t\t" ">> Valor inválido!")
                 else:
@@ -163,7 +175,7 @@ def menuAlt(connection):
         if alteracao < 0 or alteracao > 6:
             print(f'{"Digite um índice válido!":^80}')
 
-    return  ('\t'*3, "\nAlterado com sucesso, Voltando Ao Menu")
+    return  ('\t\t\t\nAlterado com sucesso, Voltando Ao Menu')
     
 def exibirTab(connection):
     cur = connection.cursor()
@@ -179,18 +191,18 @@ def exibirTab(connection):
     for row in rows: 
         print(row)
 
-    return "" 
+    return  
 
 def delAmostra(connection):
     exibirTab(connection)
     cur = connection.cursor()
 
-    id = int(input("Digite a o id da amostra que deseja excluir: "))
-    #criar verificação para ver se existe no banco
+    id = leitura("Digite a o id da amostra que deseja excluir: ")
+
     sqlSelect= "delete from AMOSTRAS where id={}".format(id)
     cur.execute(sqlSelect)
     
-    return ('\t'*3,"\nDeletado com sucesso, Voltando Ao Menu")
+    return ('\t\t\t\nDeletado com sucesso, Voltando Ao Menu')
 
 def classAmostra(connection):
     cur = connection.cursor()
@@ -244,12 +256,14 @@ def classAmostra(connection):
         print("\nQualidade do ar:", qldAr, "\nImplicacoes a saude: Toda a população pode apresentar sérios riscos de manifestações de doenças respiratórias e cardiovasculares. Aumento de mortes prematuras em pessoas de grupos sensíveis (crianças, idosos e pessoas com doenças respiratórias e cardíacas).")
 
 
-    return ('\t'*3, ",Classificado com sucesso, Voltando Ao Menu")
+    return ('\t\t\t\nClassificado com sucesso, Voltando Ao Menu')
+
+#-------------INICIO SISTEMA----------------------
+
+con = conexao()
 
 menu = True
 while menu == True:
-    con = conexao("")
-
     print('\n\n','='*75,'\n\n','\t'*4,'    MENU\n')
     print('\t'*3,' Sistema de Qualidade do Ar *\n')
     print('\t'*3,' [1]   ADICIONAR AMOSTRA')
@@ -259,7 +273,7 @@ while menu == True:
     print('\t'*3,' [5]   SAIR\n')
 
     while True:
-        opcao= int(input('>> Digite a opção desejada: '))
+        opcao=leitura('>> Digite a opção desejada: ')
         if opcao not in (1,2,3,4,5):
             print('Digite um valor válido.')
         else:
