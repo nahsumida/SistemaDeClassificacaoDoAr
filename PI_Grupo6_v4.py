@@ -464,3 +464,35 @@ while menu == True:
 
                 menu = False
             break
+	
+	
+''' 
+-----------------------Amostras------------------------
+CREATE SEQUENCE ID_SEQ START WITH 001 INCREMENT BY 1 MAXVALUE 9999 NOCYCLE NOCACHE
+
+CREATE TABLE AMOSTRAS (
+     ID NUMBER NOT NULL,
+     MP10 NUMBER NOT NULL,
+     MP25 NUMBER NOT NULL,
+     O3 NUMBER NOT NULL,
+     CO NUMBER NOT NULL,
+     NO2 NUMBER NOT NULL, 
+     SO2 NUMBER NOT NULL,
+     CONSTRAINT pk_id PRIMARY KEY (ID)
+);
+
+INSERT INTO AMOSTRAS VALUES(ID_SEQ.NEXTVAL, 10, 10, 10, 10, 10,10)
+
+--------Qualidade do AR (CRIPTOGRAFIA)------------------
+CREATE TABLE QLDAR (
+     ID NUMBER NOT NULL,
+Qualidade varchar2(15) NOT NULL,
+     CONSTRAINT pk_idqld PRIMARY KEY (ID)
+);
+
+insert into QLDAR values(1, 'WJMM');
+insert into QLDAR values(2, 'OQUVUDEP');
+insert into QLDAR values(3, 'ORWA');
+insert into QLDAR values( 4, 'UCDOZCOCMM');
+insert into QLDAR values(5, 'QFQQWAWW');
+'''
