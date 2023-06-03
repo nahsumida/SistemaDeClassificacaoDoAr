@@ -1,4 +1,97 @@
 import cx_Oracle
+import numpy as np
+from itertools import chain
+
+def descriptografar(connection, id):
+    cur = connection.cursor()
+    sqlSelect= "Select Qualidade from QLDAR where id={}".format(id)
+    cur.execute(sqlSelect)
+
+    rows = cur.fetchall()
+
+    for row in rows:
+        qld=row[0]
+        
+    #Palavra a ser descriptografada
+    Palavra = qld
+
+    #alfabeto
+    T=["Z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y"]
+
+    #chave da criptografia
+    A=[[4,1],[3,2]]
+
+    #inversa da chave
+    AInversa=[[A[1][1], -(A[0][1])],[-(A[1][0]), A[0][0]]]
+
+    matrix = np.array(A) 
+
+    #encontra a determinante da chave
+    det = np.linalg.det(matrix)
+    det = round(det)
+
+    #conjunto z26
+    Z26 = [[1,1],[3,9],[5,21],[7,15],[9, 3], [11,19], [15, 7],[17,23],[19, 11], [21,5], [23, 17], [25,25]]
+
+    #encontra o determinante da chaveInversa
+    detInversa = 0
+    for i in range(len(Z26)):
+        if Z26[i][0] == det:
+            detInversa = Z26[i][1]
+            
+
+    #multipica a chave inversa pela sua determinante
+    for i in range(len(AInversa)):
+        AInversa[i][0] *= detInversa
+        AInversa[i][1] *= detInversa
+        
+    #criacao da matriz P baseada nos indices da T
+    common = []
+    for i in range(len(Palavra)): 
+        for j in range(len(T)):
+            if Palavra[i] == T[j]:
+                common.append(j) 
+    pLinha1 = []
+    pLinha2 = []
+    P = []
+            
+    for i in range(len(common)): 
+        if i % 2 == 0:
+            pLinha1.append(common[i])
+        if i % 2 > 0: 
+            pLinha2.append(common[i])
+
+    #matriz P
+    P.append(pLinha1)
+    P.append(pLinha2)
+
+    #P = AInversa * C
+    resultado = np.dot(AInversa, P)
+        
+    for i in range(len(resultado)):
+        for j in range(len(resultado[i])):
+            val = resultado[i][j]
+            if val > 0:
+                resultado[i][j] = val%26
+            if val < 0:
+                while val < 0: 
+                    val += 26
+                resultado[i][j] = val
+                
+    linha1 = resultado[0]
+    linha2 = resultado[1]
+    res = list(chain.from_iterable(zip(linha1, linha2)))
+
+    #encontra a palavra baseada em T
+    palavra = []
+    for i in res: 
+        for j in range(len(T)):
+            if i == j:
+                palavra.append(T[j])
+
+    pFinal = "".join(palavra)
+
+    return (pFinal)
 
 def conexao():
     pw = ""
@@ -43,7 +136,6 @@ def addAmostra(connection):
     cur.execute(sqlInsert)
     con.commit()
 
-
     exibirTab(connection)
     return ('\t\t\t\nAdicionado com sucesso, Voltando Ao Menu')
 
@@ -66,7 +158,6 @@ def menuAlt(connection):
     mp10 = mp25 = o3 = co = no2 = so2 = -1
 
     id = leitura("\nDigite a o id da amostra que deseja alterar: ")
-    #criar verificação para ver se existe no banco
     sqlSelect= "Select mp10, mp25, o3, co, no2, so2 from AMOSTRAS where id={}".format(id)
     cur.execute(sqlSelect)
     
@@ -78,8 +169,7 @@ def menuAlt(connection):
         o3=row[2]
         co=row[3]
         no2=row[4]
-        so2=row[5]
-        #print(row)    
+        so2=row[5]   
     
     while True:
         print()
@@ -220,16 +310,11 @@ def exibirTab(connection):
 
     sqlSelect= 'select id, mp10, mp25, o3, co, no2, so2 from amostras'
     cur.execute(sqlSelect)
-        
-    #column_names = [desc[0] for desc in cur.description]
-    #print(column_names)
 
     rows = cur.fetchall()
 
     print(f'\n{"ID":^12} | {"MP 10":^12} | {"MP 2.5":^12} | {"O3":^12} | {"CO":^12} | {"NO2":^12} | {"SO2":^12}')
-    for i in rows: 
-        #print(i)
-        #for i in row:
+    for i in rows:
         id = i[0]
         mp10=i[1]
         mp25=i[2]
@@ -254,18 +339,13 @@ def delAmostra(connection):
         return ('\t\t\t\nDeletado com sucesso, Voltando Ao Menu')
     else:
         return ('\t\t\t\nO item NÃO foi deletado, Voltando Ao Menu')
-    
-#return ('\t\t\t\nDeletado com sucesso, Voltando Ao Menu')
 
+# CLASSIFICAR AMOSTRA
 def classAmostra(connection):
     cur = connection.cursor()
 
     sqlSelect= 'select avg(mp10), avg(mp25), avg(o3), avg(co), avg(no2), avg(so2) from amostras'
     cur.execute(sqlSelect)
-
-    #column_names = [desc[0] for desc in cur.description]
-    
-    #print(column_names)
 
     rows = cur.fetchall()
 
@@ -277,41 +357,51 @@ def classAmostra(connection):
         no2=row[4]
         so2=row[5]
 
-        #print(row)
-        print("Média mp10: ", mp10)
-        print("\nMédia mp25: ", mp25)
-        print("\nMédia o3: ", o3)
-        print("\nMédia co: ", co)
-        print("\nMédia so2: ", so2)
+        print(f"Média mp10: {mp10:.3f}")
+        print(f"Média mp25: {mp25:.3f}")
+        print(f"Média o3: {o3:.3f}")
+        print(f"Média co: {co:.3f}")
+        print(f"Média so2: {so2:.3f}")
 
-    qldAr = "" 
+    qldAr = 0 
     if 50 >= mp10 and 25 >= mp25 and 100 >= o3 and 9 >= co and 200 >= no2 and 20 >= so2:
-        qldAr = "Bom"
+        qldAr = 1
     elif mp10 > 50 and mp10 <= 100 or mp25 > 25 and mp25 <= 50 or 100 < o3 and o3 < 130 or 9 < co and co < 11 or 200 < no2 and no2 < 240 or 20 < so2 and so2 < 40:
-        qldAr = "Moderado"
+        qldAr = 2
     elif 100 < mp10 and mp10 <= 150 or 50 < mp25 and mp25 <= 75 or 130 < o3 and o3 <= 160 or 11 < co and co <= 13 or 240 < no2 and no2 <= 320 or 40 < so2 and so2 <= 365:
-        qldAr = "Ruim"
+        qldAr = 3
     elif 150 < mp10 and mp10 <= 250 or 75 < mp25 and mp25 < 125 or 160 < o3 and o3 < 200 or 13 < co and co < 15  or 320 < no2 and no2 < 1130 or 365 < so2 and so2 < 800: 
-        qldAr = "Muito Ruim"
+        qldAr = 4
     else:
-        qldAr = "Pessima" 
+        qldAr = 5 
+        
+    qldDescriptografada = descriptografar(connection, qldAr)
+    if qldDescriptografada == "BOMM":
+        qldDescriptografada = "Bom"
+    elif qldDescriptografada == "MODERADO":
+        qldDescriptografada = "Moderado"
+    elif qldDescriptografada == "RUIM":
+        qldDescriptografada = "Ruim"
+    elif qldDescriptografada == "MUITORUIMM":
+        qldDescriptografada = "Muito Ruim"
+    else:
+        qldDescriptografada = "Pessimo"
 
     # Saída de dados - Informações sobre a classificação do ar e as implicações a saúde
-    if qldAr == "Bom": 
-        print("\n\nQualidade do ar:", qldAr, "\n\nImplicacoes a saude: Nenhuma")
-    elif qldAr == "Moderado": 
-        print("\n\nQualidade do ar:", qldAr, "\n\nImplicacoes a saude: Pessoas de grupos sensíveis (crianças, idosos e pessoas com doenças respiratórias e cardíacas) podem apresentar sintomas como tosse seca e cansaço. A população, em geral, não é afetada.")
-    elif qldAr == "Ruim": 
-        print("\n\nQualidade do ar:", qldAr, "\n\nImplicacoes a saude: Toda a população pode apresentar sintomas como tosse seca, cansaço, ardor nos olhos, nariz e garganta. Pessoas de grupos sensíveis (crianças, idosos e pessoas com doenças respiratórias e cardíacas) podem apresentar efeitos mais sérios na saúde.")
-    elif qldAr == "Muito Ruim":
-        print("\n\nQualidade do ar:", qldAr, "\n\nImplicacoes a saude: Toda a população pode apresentar sintomas como tosse seca, cansaço, ardor nos olhos, nariz e garganta e ainda falta de ar e respiração ofegante. Efeitos mais graves à saúde de grupos sensíveis (crianças, idosos e pessoas com doenças respiratórias e cardíacas).")
+    if qldDescriptografada == "Bom": 
+        print("\n\nQualidade do ar:", qldDescriptografada, "\n\nImplicacoes a saude: Nenhuma")
+    elif qldDescriptografada == "Moderado": 
+        print("\n\nQualidade do ar:", qldDescriptografada, "\n\nImplicacoes a saude: Pessoas de grupos sensíveis (crianças, idosos e pessoas com doenças respiratórias e cardíacas) podem apresentar sintomas como tosse seca e cansaço. A população, em geral, não é afetada.")
+    elif qldDescriptografada == "Ruim": 
+        print("\n\nQualidade do ar:", qldDescriptografada, "\n\nImplicacoes a saude: Toda a população pode apresentar sintomas como tosse seca, cansaço, ardor nos olhos, nariz e garganta. Pessoas de grupos sensíveis (crianças, idosos e pessoas com doenças respiratórias e cardíacas) podem apresentar efeitos mais sérios na saúde.")
+    elif qldDescriptografada == "Muito Ruim":
+        print("\n\nQualidade do ar:", qldDescriptografada, "\n\nImplicacoes a saude: Toda a população pode apresentar sintomas como tosse seca, cansaço, ardor nos olhos, nariz e garganta e ainda falta de ar e respiração ofegante. Efeitos mais graves à saúde de grupos sensíveis (crianças, idosos e pessoas com doenças respiratórias e cardíacas).")
     else: 
-        print("\n\nQualidade do ar:", qldAr, "\n\nImplicacoes a saude: Toda a população pode apresentar sérios riscos de manifestações de doenças respiratórias e cardiovasculares. Aumento de mortes prematuras em pessoas de grupos sensíveis (crianças, idosos e pessoas com doenças respiratórias e cardíacas).")
+        print("\n\nQualidade do ar:", qldDescriptografada, "\n\nImplicacoes a saude: Toda a população pode apresentar sérios riscos de manifestações de doenças respiratórias e cardiovasculares. Aumento de mortes prematuras em pessoas de grupos sensíveis (crianças, idosos e pessoas com doenças respiratórias e cardíacas).")
 
 
     return ('\t\t\t\nClassificado com sucesso, Voltando Ao Menu')
 
-#
 def confirmacao(str = "alterar"):
 	resp = ""
 	if str == "alterar":
@@ -374,4 +464,3 @@ while menu == True:
 
                 menu = False
             break
-
